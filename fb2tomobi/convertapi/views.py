@@ -5,27 +5,37 @@ import subprocess
 import os
 from django.conf import settings
 from .models import Book
-from .serializers import BookSerializer
+from .serializers import BookSerializer, BookSerializerPost
 from django.core.files.base import ContentFile
 
+CONVERT_TO_EXTENSION = '.mobi'
+
 class BookViewSet(viewsets.ModelViewSet):
-    serializer_class = BookSerializer
-    queryset = Book.objects.all().order_by('name')
+    queryset = Book.objects.all().order_by('pk')
     parser_classes = [MultiPartParser]
     http_method_names = ['get', 'put', 'delete']
-    def put(self, request, *args, **kwargs):
+
+    def get_serializer_class(self):
+        is_post_request = self.request.method == 'POST'
+        is_post_form = self.action == None or self.action == 'update'
+        if is_post_request or is_post_form:
+            return BookSerializerPost
+        return BookSerializer
+
+    def put(self, request):
         file_serializer = BookSerializer(data=request.data)
         if file_serializer.is_valid():
             file_serializer.save()
-            book_name = file_serializer.root.data["book"]
-            file_to_convert = book_name.replace(settings.MEDIA_URL, settings.MEDIA_ROOT + '\\')
-            new_file_location = os.path.splitext(file_to_convert)[0] + '.mobi'
+            book_name = file_serializer.root.data["book"].replace(settings.MEDIA_URL, '')
+            book_name_mobi = os.path.splitext(book_name)[0] + CONVERT_TO_EXTENSION
+            file_to_convert = settings.MEDIA_ROOT + '\\' + book_name
+            new_file_location = settings.MEDIA_ROOT + '\\' + book_name_mobi
             final_convert_command = settings.CALIBRE_CONVERTER_LOCATION + " " + file_to_convert + " " + new_file_location
             subprocess.check_call(final_convert_command)
             created_book = Book.objects.filter(pk=file_serializer.root.data["pk"]).first()
             with open(file_to_convert, "rb") as fh:
                 with ContentFile(fh.read()) as 	file_content:
-                    created_book.converted_book.save(os.path.splitext(book_name.replace(settings.MEDIA_URL,''))[0]+'.mobi', file_content)
+                    created_book.converted_book.name = book_name_mobi
                     created_book.save()
             return Response(BookSerializer(created_book).data, status=status.HTTP_201_CREATED)
         else:
