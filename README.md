@@ -22,5 +22,3 @@ admin acc creation:
 ```bash
     python manage.py createsuperuser
 ```
-
-_Notes:_ you can use `breakpoint()` to set breakpoint in vscode
