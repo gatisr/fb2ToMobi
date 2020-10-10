@@ -8,15 +8,15 @@ In order to run project:
 
 ```bash
     pip install -r requirements.txt
-    cd .\fb2tomobi\
     python manage.py migrate --run-syncdb
     python manage.py runserver
 ```
 
-http://localhost:8000/
-http://localhost:8000/admin
+api url: http://localhost:8000/
+admin api url: http://localhost:8000/admin
+
+admin acc creation:
 
 ```bash
-    Login: gatis_riders
-    Pass: admin
+    python manage.py createsuperuser
 ```
