@@ -12,6 +12,7 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     queryset = Book.objects.all().order_by('name')
     parser_classes = [MultiPartParser]
+    http_method_names = ['get', 'put', 'delete']
     def put(self, request, *args, **kwargs):
         file_serializer = BookSerializer(data=request.data)
         if file_serializer.is_valid():
