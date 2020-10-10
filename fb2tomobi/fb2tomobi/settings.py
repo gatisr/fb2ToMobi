@@ -17,6 +17,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = os.path.join(BASE_DIR, 'fb2_files')
 MEDIA_URL = '/media/'
+CALIBRE_CONVERTER_LOCATION = 'C:\\Users\\gatis_riders\\Downloads\\cali\\Calibre Portable\\Calibre\\ebook-convert.exe'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/

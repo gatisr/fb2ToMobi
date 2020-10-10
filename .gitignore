@@ -114,3 +114,4 @@ media/
 # **/migrations/**
 # !**/migrations
 # !**/migrations/__init__.py
+fb2tomobi/fb2_files/*
