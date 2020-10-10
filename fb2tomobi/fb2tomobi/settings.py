@@ -16,7 +16,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'fb2_files')
-MEDIA_URL = '/fb2_files/'
+MEDIA_URL = '/media/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
